@@ -23,7 +23,7 @@ This class will help you to get media metadata with ffmpeg
     D/OUTPUT_Duration: : 00:00:03.05
     D/OUTPUT_start: 0.000000
     I/OUTPUT_: VIDEO ************ VIDEO ************
-    D/OUTPUT_VIDEO_INF: Video: h264 (avc1 / 0x31637661), yuv420p, 1280x720 [SAR 1:1 DAR 16:9], 2195 kb/s, 23.98 fps
+    D/OUTPUT_VIDEO_INFO: Video: h264 (avc1 / 0x31637661), yuv420p, 1280x720 [SAR 1:1 DAR 16:9], 2195 kb/s, 23.98 fps
     D/OUTPUT_VIDEO_FPS: 23.98 fps
     D/OUTPUT_VIDEO_Bitrate: 2195 kb/s
     D/OUTPUT_VIDEO_Resolution: 1280x720
