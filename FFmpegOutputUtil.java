@@ -34,55 +34,10 @@ public class FFmpegOutputUtil {
         void onMetadataRetrieved(String metadata);
     }
 
-
     public static void getMediaInfo(Context context, String input, GetMetaData metaData) {
         List<String> commandList = new LinkedList<>();
-
-//        commandList.add("-i");
-//        commandList.add(input);
-//        commandList.add("-hide_banner");
-//        commandList.add("-c:v");
-//        commandList.add("copy");
-//        commandList.add("-c:a");
-//        commandList.add("copy");
-//        commandList.add("-f");
-//        commandList.add("null");
-//        commandList.add("-");
-
-//        commandList.add("-i");
-//        commandList.add(input);
-//        commandList.add("-c:v");
-//        commandList.add("copy");
-//        commandList.add("-c:a");
-//        commandList.add("copy");
-//        commandList.add("-f");
-//        commandList.add("ffmetadata");
-//        commandList.add(outputText);
-
-
-
-
-//        commandList.add("-i");
-//        commandList.add(input);
-//        commandList.add("-map_metadata");
-//        commandList.add("-1");
-//        commandList.add("-c:v");
-//        commandList.add("copy");
-//        commandList.add("-c:a");
-//        commandList.add("copy");
-//        commandList.add("-f");
-//        commandList.add("null");
-//        commandList.add("-");
-//        commandList.add("-hide_banner");
-
-
-
-
         commandList.add("-i");
         commandList.add(input);
-
-
-
         String[] command = commandList.toArray(new String[0]);
         try {
             FFmpeg.getInstance(context).execute(command, new ExecuteBinaryResponseHandler() {
@@ -548,67 +503,6 @@ public class FFmpegOutputUtil {
         return "";
     }
 
-
-//    public static String getMediaMimeType(String inputPath) {
-//        try {
-//            String extension = getExtension(inputPath);
-//            String mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-//            if (mimetype != null) {
-////                return mimetype.split("/")[1].toLowerCase().trim();
-//                return mimetype;
-//
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return "";
-//    }
-//
-//
-//    public static String getExtension(final String filename) {
-//        try {
-//            if (filename == null) {
-//                return "";
-//            }
-//            final int index = indexOfExtension(filename);
-//            if (index == -1) {
-//                return "";
-//            } else {
-//                return filename.substring(index + 1);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return "";
-//    }
-//
-//    public static int indexOfExtension(final String filename) {
-//        try {
-//            if (filename == null) {
-//                return -1;
-//            }
-//            final int extensionPos = filename.lastIndexOf('.');
-//            final int lastSeparator = indexOfLastSeparator(filename);
-//            return lastSeparator > extensionPos ? -1 : extensionPos;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return -1;
-//    }
-//
-//    public static int indexOfLastSeparator(final String filename) {
-//        try {
-//            if (filename == null) {
-//                return -1;
-//            }
-//            final int lastUnixPos = filename.lastIndexOf('/');
-//            final int lastWindowsPos = filename.lastIndexOf('\\');
-//            return Math.max(lastUnixPos, lastWindowsPos);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return -1;
-//    }
 
 
 }
