@@ -10,7 +10,7 @@ This class will help you to get media metadata with ffmpeg
     });
     
     
-*#& Sample output
+*& Sample output
 
     D/OUTPUT_WritingApplication: : Lavf55.48.100
     D/OUTPUT_major_brand: : isom
