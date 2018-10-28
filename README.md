@@ -1,27 +1,10 @@
 # FFmpegUtils
 This class will help you to get media metadata using [FFMPEG](https://www.ffmpeg.org)
 
-## Usage:
-
-    FFmpegOutputUtil.getMediaInfo(this,inPath, new FFmpegOutputUtil.GetMetaData() {
-        @Override
-        public void onMetadataRetrieved(Map<String, String> map) {
-           // Log.d("VIDEO_Resolution"  , map.get("VIDEO_Resolution"));
-            for (String key : map.keySet()) {
-                Log.d("DEBUG_"+key  ,  map.get(key)      );
-            }
-        }
-    });
-    
-    
-## Sample output
-
-# FFmpegUtils
-This class will help you to get media metadata using [FFMPEG](https://www.ffmpeg.org)
 
 ## Usage:
 
-    FFmpegOutputUtil.getMediaInfo(this,inPath, new FFmpegOutputUtil.GetMetaData() {
+    FFmpegOutputUtil.getMediaInfo(this, mediaPath, new FFmpegOutputUtil.GetMetaData() {
         @Override
         public void onMetadataRetrieved(Map<String, String> map) {
            // Log.d("VIDEO_Resolution"  , map.get("VIDEO_Resolution"));
