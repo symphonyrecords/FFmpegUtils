@@ -60,17 +60,17 @@ public class FFmpegOutputUtil {
                     String usefulMetadata = getUsefulDataFromOutput2(s);
                     Log.d("usefulMetadata", usefulMetadata);
                     // TODO: 10/26/2018
-//                    Log.d(OUTPUT_TAG + "WritingApplication", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "encoder"));
-//                    Log.d(OUTPUT_TAG + "creation_time", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "creation_time"));
-//                    Log.d(OUTPUT_TAG + "major_brand", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "major_brand"));
-//                    Log.d(OUTPUT_TAG + "minor_version", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "minor_version"));
-//                    Log.d(OUTPUT_TAG + "compatible_brands", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "compatible_brands"));
-//                    Log.d(OUTPUT_TAG + "handler_name", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "handler_name"));
-//                    Log.d(OUTPUT_TAG + "comment", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "comment"));
-//                    Log.d(OUTPUT_TAG + "copyright", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "copyright"));
-//                    Log.d(OUTPUT_TAG + "OverallBitrate_DataRate", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "bitrate"));
-//                    Log.d(OUTPUT_TAG + "Duration", getSingleValueFromOutputEndsWithComma(usefulMetadata, "Duration", ","));
-//                    Log.d(OUTPUT_TAG + "start", getSingleValueFromOutputEndsWithComma(usefulMetadata, "start:", ","));
+//                   Log.d(OUTPUT_TAG + "WritingApplication", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "encoder"));
+//                   Log.d(OUTPUT_TAG + "creation_time", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "creation_time"));
+//                   Log.d(OUTPUT_TAG + "major_brand", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "major_brand"));
+//                   Log.d(OUTPUT_TAG + "minor_version", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "minor_version"));
+//                  Log.d(OUTPUT_TAG+"compatible_brands",getSingleValueFromOutputEndsWithBreakLine(usefulMetadata,"compatible_brands"));
+//                   Log.d(OUTPUT_TAG + "handler_name", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "handler_name"));
+//                   Log.d(OUTPUT_TAG + "comment", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "comment"));
+//                   Log.d(OUTPUT_TAG + "copyright", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "copyright"));
+//                   Log.d(OUTPUT_TAG + "OverallBitrate_DataRate",getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "bitrate"));
+//                   Log.d(OUTPUT_TAG + "Duration", getSingleValueFromOutputEndsWithComma(usefulMetadata, "Duration", ","));
+//                   Log.d(OUTPUT_TAG + "start", getSingleValueFromOutputEndsWithComma(usefulMetadata, "start:", ","));
 //
 ////                    Log.d(OUTPUT_TAG + "FILE_MimeType", getMediaMimeType(input));
 //
