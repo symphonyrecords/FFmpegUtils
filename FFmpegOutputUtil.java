@@ -74,7 +74,7 @@ public class FFmpegOutputUtil {
 //
 ////                    Log.d(OUTPUT_TAG + "FILE_MimeType", getMediaMimeType(input));
 //
-///////////////////////////////////////////////////////****VIDEO****///////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////****AUDIO****////////////////////////////////////////////////////////////////////
 //                    String videoLine = removeEverythingBefore(findWordAndReturnWholeLine(usefulMetadata, "Video:"), "Video:");
 //                    Log.i(OUTPUT_TAG, "VIDEO ************ VIDEO ************");
 //                    Log.d(OUTPUT_TAG + "ALL_VIDEO_INFO", videoLine);
@@ -91,7 +91,7 @@ public class FFmpegOutputUtil {
 //
 //
 //
-///////////////////////////////////////////////////////****AUDIO****///////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////****AUDIO****////////////////////////////////////////////////////////////////////
 //                    String audioLine = removeEverythingBefore(findWordAndReturnWholeLine(usefulMetadata, "Audio:"), "Audio:");
 //                    Log.i(OUTPUT_TAG, "AUDIO ************ AUDIO ************");
 //                    Log.d(OUTPUT_TAG + "ALL_AUDIO_INFO", audioLine);
