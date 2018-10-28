@@ -3,6 +3,7 @@ package com.symphonyrecords.mediacomp.design;
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -23,7 +24,7 @@ import nl.bravobit.ffmpeg.FFmpeg;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class FFmpegOutputUtil {
 
-    private static String OUTPUT_TAG = "OUTPUT_";
+    private static String OUTPUT_TAG = "DEBUG_";
 
     private static String separator = System.getProperty("line.separator");
 
@@ -55,10 +56,55 @@ public class FFmpegOutputUtil {
 
 //                  LinkedHashMap to preserve order
                     Map<String, String> map = new LinkedHashMap<>();
-
+//                    metaData.onMetadataRetrieved(s);
                     String usefulMetadata = getUsefulDataFromOutput2(s);
                     Log.d("usefulMetadata", usefulMetadata);
-                    
+                    // TODO: 10/26/2018
+//                    Log.d(OUTPUT_TAG + "WritingApplication", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "encoder"));
+//                    Log.d(OUTPUT_TAG + "creation_time", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "creation_time"));
+//                    Log.d(OUTPUT_TAG + "major_brand", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "major_brand"));
+//                    Log.d(OUTPUT_TAG + "minor_version", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "minor_version"));
+//                    Log.d(OUTPUT_TAG + "compatible_brands", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "compatible_brands"));
+//                    Log.d(OUTPUT_TAG + "handler_name", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "handler_name"));
+//                    Log.d(OUTPUT_TAG + "comment", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "comment"));
+//                    Log.d(OUTPUT_TAG + "copyright", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "copyright"));
+//                    Log.d(OUTPUT_TAG + "OverallBitrate_DataRate", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "bitrate"));
+//                    Log.d(OUTPUT_TAG + "Duration", getSingleValueFromOutputEndsWithComma(usefulMetadata, "Duration", ","));
+//                    Log.d(OUTPUT_TAG + "start", getSingleValueFromOutputEndsWithComma(usefulMetadata, "start:", ","));
+//
+////                    Log.d(OUTPUT_TAG + "FILE_MimeType", getMediaMimeType(input));
+//
+///////////////////////////////////////////////////////****VIDEO****///////////////////////////////////////////////////////////////////////////
+//                    String videoLine = removeEverythingBefore(findWordAndReturnWholeLine(usefulMetadata, "Video:"), "Video:");
+//                    Log.i(OUTPUT_TAG, "VIDEO ************ VIDEO ************");
+//                    Log.d(OUTPUT_TAG + "ALL_VIDEO_INFO", videoLine);
+//                    Log.d(OUTPUT_TAG + "VIDEO_FPS", getFPS(videoLine));
+//                    Log.d(OUTPUT_TAG + "VIDEO_Bitrate", getBitrate(videoLine));
+//                    Log.d(OUTPUT_TAG + "VIDEO_Resolution", getVideoResolution(input));
+//                    Log.d(OUTPUT_TAG + "VIDEO_Codec", getCodec(videoLine));
+////                    Log.d(OUTPUT_TAG + "VIDEO_DAR_SAR", getStringBetweenTwoChars(videoLine, "[", "]"));
+//                    Log.d(OUTPUT_TAG + "VIDEO_DAR", getDar(videoLine));
+//                    Log.d(OUTPUT_TAG + "VIDEO_SAR", getSar(videoLine));
+//                    Log.d(OUTPUT_TAG + "VIDEO_ColorSpace", getColorSpace(videoLine));
+//
+//
+//
+//
+//
+///////////////////////////////////////////////////////****AUDIO****///////////////////////////////////////////////////////////////////////////
+//                    String audioLine = removeEverythingBefore(findWordAndReturnWholeLine(usefulMetadata, "Audio:"), "Audio:");
+//                    Log.i(OUTPUT_TAG, "AUDIO ************ AUDIO ************");
+//                    Log.d(OUTPUT_TAG + "ALL_AUDIO_INFO", audioLine);
+//                    Log.d(OUTPUT_TAG + "AUDIO_Bitrate", getBitrate(audioLine));
+//                    Log.d(OUTPUT_TAG + "AUDIO_SampleRate", getAudioSampleRate(audioLine));
+//                    Log.d(OUTPUT_TAG + "AUDIO_AudioChanel", getAudioChanel(audioLine));
+//                    Log.d(OUTPUT_TAG + "AUDIO_Codec", getCodec(audioLine));
+
+
+
+
+
+
                     map.put( "WritingApplication", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "encoder"));
                     map.put( "creation_time", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "creation_time"));
                     map.put( "major_brand", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "major_brand"));
@@ -71,7 +117,9 @@ public class FFmpegOutputUtil {
                     map.put( "Duration", getSingleValueFromOutputEndsWithComma(usefulMetadata, "Duration", ","));
                     map.put( "start", getSingleValueFromOutputEndsWithComma(usefulMetadata, "start:", ","));
 
-/////////////////////////////////////////////////////****VIDEO****//////////////////////////////////////////////////////////////////////
+//                    Log.d(OUTPUT_TAG + "FILE_MimeType", getMediaMimeType(input));
+
+/////////////////////////////////////////////////////****VIDEO****/////////////////////////////////////////////////////////////////////
                     String videoLine = removeEverythingBefore(findWordAndReturnWholeLine(usefulMetadata, "Video:"), "Video:");
                     Log.i(OUTPUT_TAG, "VIDEO ************ VIDEO ************");
                     map.put( "ALL_VIDEO_INFO", videoLine);
@@ -84,17 +132,40 @@ public class FFmpegOutputUtil {
                     map.put( "VIDEO_SAR", getSar(videoLine));
                     map.put( "VIDEO_ColorSpace", getColorSpace(videoLine));
 
-/////////////////////////////////////////////////////****AUDIO****//////////////////////////////////////////////////////////////////////
+
+
+
+
+/////////////////////////////////////////////////////****AUDIO****////////////////////////////////////////////////////////////////////
+                    String audioLine = removeEverythingBefore(findWordAndReturnWholeLine(usefulMetadata, "Audio:"), "Audio:");
                     Log.i(OUTPUT_TAG, "AUDIO ************ AUDIO ************");
                     map.put( "ALL_AUDIO_INFO", audioLine);
-                    map.put( "AUDIO_Bitrate", getBitrate(audioLine));
+
+
+                    String bitrate = getBitrate(audioLine);
+                    if (bitrate.equals("") && !getMediaMimeType(input).equals("video"))
+                        bitrate = getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "bitrate");
+                    if (bitrate.equals(""))
+                        bitrate = getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "bitrate");
+                    map.put( "AUDIO_Bitrate",bitrate);
+
+
+                    Log.d(OUTPUT_TAG + "FILE_MimeType", getMediaMimeType(input));
+
+
+
                     map.put( "AUDIO_SampleRate", getAudioSampleRate(audioLine));
                     map.put( "AUDIO_AudioChanel", getAudioChanel(audioLine));
                     map.put( "AUDIO_Codec", getCodec(audioLine));
-                    
+
+
 
                     metaData.onMetadataRetrieved(map);
-                    
+
+
+
+
+
 
                 }
             });
@@ -383,7 +454,7 @@ public class FFmpegOutputUtil {
     }
 
 
-    public static String RemoveEveryCharBeforeFirstComma(String input) {
+    public static String removeEveryCharBeforeFirstComma(String input) {
         try {
 //         String oo =  input.replaceFirst("\\w*,", "");
             return input.substring(input.lastIndexOf(',') + 1);
@@ -397,7 +468,7 @@ public class FFmpegOutputUtil {
     public static String getFPS(String input) {
         try {
             String a = removeEverythingAfter(input, "fps");
-            String b = RemoveEveryCharBeforeFirstComma(a).trim();
+            String b = removeEveryCharBeforeFirstComma(a).trim();
             if (!b.equals(""))
                 return b+" fps";
             else
@@ -411,12 +482,19 @@ public class FFmpegOutputUtil {
 
     public static String getBitrate(String input) {
         try {
+            if (!input.contains("kb/s"))
+                return "";
             String a = removeEverythingAfter(input, "kb/s");
-            String b = RemoveEveryCharBeforeFirstComma(a).trim();
+            Log.d("uuu11" ,a);
+            String b = removeEveryCharBeforeFirstComma(a).trim();
+            Log.d("uuu22" ,a);
+
             if (!b.equals(""))
                 return b+" kb/s";
             else
                 return "";
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -505,14 +583,84 @@ public class FFmpegOutputUtil {
     public static String getAudioSampleRate(String input) {
         try {
             String a = removeEverythingAfter(input, "Hz");
-            return RemoveEveryCharBeforeFirstComma(a).trim()+ " Hz";
+            return removeEveryCharBeforeFirstComma(a).trim()+ " Hz";
         } catch (Exception e) {
             e.printStackTrace();
         }
         return "";
     }
 
-    
+
+    public static String getMediaMimeType(String inputPath) {
+        try {
+            String defaultType = "audio";
+            String extension = getExtension(inputPath);
+            String mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+            String type = "";
+            try {
+                if (mimetype != null) {
+                    type = mimetype.split("/")[0].toLowerCase().trim();
+                }
+            } catch (Exception e) {
+                type = defaultType;
+            }
+            if (type.equals("")) {
+                type = defaultType;
+            }
+            return type;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+
+    public static String getExtension(final String filename) {
+        try {
+            if (filename == null) {
+                return "";
+            }
+            final int index = indexOfExtension(filename);
+            if (index == -1) {
+                return "";
+            } else {
+                return filename.substring(index + 1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static int indexOfExtension(final String filename) {
+        try {
+            if (filename == null) {
+                return -1;
+            }
+            final int extensionPos = filename.lastIndexOf('.');
+            final int lastSeparator = indexOfLastSeparator(filename);
+            return lastSeparator > extensionPos ? -1 : extensionPos;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public static int indexOfLastSeparator(final String filename) {
+        try {
+            if (filename == null) {
+                return -1;
+            }
+            final int lastUnixPos = filename.lastIndexOf('/');
+            final int lastWindowsPos = filename.lastIndexOf('\\');
+            return Math.max(lastUnixPos, lastWindowsPos);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+
 
 
     public static String getDar(String input) {
@@ -593,4 +741,3 @@ public class FFmpegOutputUtil {
 
 
 }
-
