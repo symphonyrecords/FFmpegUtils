@@ -1,5 +1,5 @@
 # FFmpegUtils
-This class will help you to get media metadata using  * [FFMPEG](https://www.ffmpeg.org)
+This class will help you to get media metadata using [FFMPEG](https://www.ffmpeg.org)
 
 ## Usage:
 
