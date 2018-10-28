@@ -71,7 +71,7 @@ public class FFmpegOutputUtil {
                     map.put( "Duration", getSingleValueFromOutputEndsWithComma(usefulMetadata, "Duration", ","));
                     map.put( "start", getSingleValueFromOutputEndsWithComma(usefulMetadata, "start:", ","));
 
-/////////////////////////////////////////////////////****VIDEO****///////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////****VIDEO****//////////////////////////////////////////////////////////////////////
                     String videoLine = removeEverythingBefore(findWordAndReturnWholeLine(usefulMetadata, "Video:"), "Video:");
                     Log.i(OUTPUT_TAG, "VIDEO ************ VIDEO ************");
                     map.put( "ALL_VIDEO_INFO", videoLine);
@@ -84,8 +84,7 @@ public class FFmpegOutputUtil {
                     map.put( "VIDEO_SAR", getSar(videoLine));
                     map.put( "VIDEO_ColorSpace", getColorSpace(videoLine));
 
-/////////////////////////////////////////////////////****AUDIO****///////////////////////////////////////////////////////////////////////////
-                    String audioLine = removeEverythingBefore(findWordAndReturnWholeLine(usefulMetadata, "Audio:"), "Audio:");
+/////////////////////////////////////////////////////****AUDIO****//////////////////////////////////////////////////////////////////////
                     Log.i(OUTPUT_TAG, "AUDIO ************ AUDIO ************");
                     map.put( "ALL_AUDIO_INFO", audioLine);
                     map.put( "AUDIO_Bitrate", getBitrate(audioLine));
