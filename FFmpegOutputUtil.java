@@ -6,9 +6,11 @@ import android.util.Log;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -31,63 +33,70 @@ public class FFmpegOutputUtil {
 
 
     public interface GetMetaData {
-        void onMetadataRetrieved(String metadata);
+        void onMetadataRetrieved(Map<String, String> map);
     }
+
 
     public static void getMediaInfo(Context context, String input, GetMetaData metaData) {
         List<String> commandList = new LinkedList<>();
+
         commandList.add("-i");
         commandList.add(input);
+
+
+
         String[] command = commandList.toArray(new String[0]);
         try {
             FFmpeg.getInstance(context).execute(command, new ExecuteBinaryResponseHandler() {
                 @Override
                 public void onFailure(String s) {
-                    Log.d("line.separator", "Failed to convert: Reason:\n" + s);
-//                    Log.d("convertTest_onSuccess", "Successfully Converted - MEDIA_METADATA-AUDIO :\n " + s);
-                    metaData.onMetadataRetrieved(s);
+                    // onFailure gets called every time because no output was specified
+                    Log.d("getMediaInfo_onFailure:", s);
+
+//                  LinkedHashMap to preserve order
+                    Map<String, String> map = new LinkedHashMap<>();
+
                     String usefulMetadata = getUsefulDataFromOutput2(s);
-                    Log.d("BBB_usefulMetadata", usefulMetadata);
-
-                    // TODO: 10/26/2018
-                    Log.d(OUTPUT_TAG + "WritingApplication", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "encoder"));
-                    Log.d(OUTPUT_TAG + "creation_time", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "creation_time"));
-                    Log.d(OUTPUT_TAG + "major_brand", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "major_brand"));
-                    Log.d(OUTPUT_TAG + "minor_version", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "minor_version"));
-                    Log.d(OUTPUT_TAG + "compatible_brands", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "compatible_brands"));
-                    Log.d(OUTPUT_TAG + "handler_name", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "handler_name"));
-                    Log.d(OUTPUT_TAG + "comment", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "comment"));
-                    Log.d(OUTPUT_TAG + "copyright", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "copyright"));
-                    Log.d(OUTPUT_TAG + "OverallBitrate_DataRate", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "bitrate"));
-                    Log.d(OUTPUT_TAG + "Duration", getSingleValueFromOutputEndsWithComma(usefulMetadata, "Duration", ","));
-                    Log.d(OUTPUT_TAG + "start", getSingleValueFromOutputEndsWithComma(usefulMetadata, "start:", ","));
-
-//                    Log.d(OUTPUT_TAG + "FILE_MimeType", getMediaMimeType(input));
-
+                    Log.d("usefulMetadata", usefulMetadata);
+                    
+                    map.put( "WritingApplication", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "encoder"));
+                    map.put( "creation_time", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "creation_time"));
+                    map.put( "major_brand", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "major_brand"));
+                    map.put( "minor_version", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "minor_version"));
+                    map.put( "compatible_brands", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "compatible_brands"));
+                    map.put( "handler_name", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "handler_name"));
+                    map.put( "comment", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "comment"));
+                    map.put( "copyright", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "copyright"));
+                    map.put( "OverallBitrate_DataRate", getSingleValueFromOutputEndsWithBreakLine(usefulMetadata, "bitrate"));
+                    map.put( "Duration", getSingleValueFromOutputEndsWithComma(usefulMetadata, "Duration", ","));
+                    map.put( "start", getSingleValueFromOutputEndsWithComma(usefulMetadata, "start:", ","));
 
 /////////////////////////////////////////////////////****VIDEO****///////////////////////////////////////////////////////////////////////////
                     String videoLine = removeEverythingBefore(findWordAndReturnWholeLine(usefulMetadata, "Video:"), "Video:");
                     Log.i(OUTPUT_TAG, "VIDEO ************ VIDEO ************");
-                    Log.d(OUTPUT_TAG + "ALL_VIDEO_INFO", videoLine);
-                    Log.d(OUTPUT_TAG + "VIDEO_FPS", getFPS(videoLine));
-                    Log.d(OUTPUT_TAG + "VIDEO_Bitrate", getBitrate(videoLine));
-                    Log.d(OUTPUT_TAG + "VIDEO_Resolution", getVideoResolution(input));
-                    Log.d(OUTPUT_TAG + "VIDEO_Codec", getCodec(videoLine));
+                    map.put( "ALL_VIDEO_INFO", videoLine);
+                    map.put( "VIDEO_FPS", getFPS(videoLine));
+                    map.put( "VIDEO_Bitrate", getBitrate(videoLine));
+                    map.put( "VIDEO_Resolution", getVideoResolution(input));
+                    map.put( "VIDEO_Codec", getCodec(videoLine));
+//                    Log.d(OUTPUT_TAG + "VIDEO_DAR_SAR", getStringBetweenTwoChars(videoLine, "[", "]"));
+                    map.put( "VIDEO_DAR", getDar(videoLine));
+                    map.put( "VIDEO_SAR", getSar(videoLine));
+                    map.put( "VIDEO_ColorSpace", getColorSpace(videoLine));
 
 /////////////////////////////////////////////////////****AUDIO****///////////////////////////////////////////////////////////////////////////
                     String audioLine = removeEverythingBefore(findWordAndReturnWholeLine(usefulMetadata, "Audio:"), "Audio:");
                     Log.i(OUTPUT_TAG, "AUDIO ************ AUDIO ************");
-                    Log.d(OUTPUT_TAG + "ALL_AUDIO_INFO", audioLine);
-                    Log.d(OUTPUT_TAG + "AUDIO_Bitrate", getBitrate(audioLine));
-                    Log.d(OUTPUT_TAG + "AUDIO_SampleRate", getAudioSampleRate(audioLine));
-                    Log.d(OUTPUT_TAG + "AUDIO_AudioChanel", getAudioChanel(audioLine));
-                    Log.d(OUTPUT_TAG + "AUDIO_Codec", getCodec(audioLine));
-                }
-                @Override
-                public void onSuccess(String s) {
-                }
-                @Override
-                public void onFinish() {
+                    map.put( "ALL_AUDIO_INFO", audioLine);
+                    map.put( "AUDIO_Bitrate", getBitrate(audioLine));
+                    map.put( "AUDIO_SampleRate", getAudioSampleRate(audioLine));
+                    map.put( "AUDIO_AudioChanel", getAudioChanel(audioLine));
+                    map.put( "AUDIO_Codec", getCodec(audioLine));
+                    
+
+                    metaData.onMetadataRetrieved(map);
+                    
+
                 }
             });
         } catch (Throwable ignored) {
@@ -156,6 +165,16 @@ public class FFmpegOutputUtil {
     }
 
 
+
+    public static String getStringBeforeACharacter(String input, String word) {
+        try {
+            return input.substring(0, input.indexOf(word));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     public static String removeEverythingBefore(String input, String word) {
         try {
             return input.substring(input.indexOf(word));
@@ -165,15 +184,6 @@ public class FFmpegOutputUtil {
         return "";
     }
 
-
-    public static String removeEverythingBefore(String input, String word, int howManyOfStartedWord) {
-        try {
-            return input.substring(input.indexOf(word) + howManyOfStartedWord);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
 
     public static String removeEverythingAfter(String input, String word) {
         try {
@@ -502,6 +512,84 @@ public class FFmpegOutputUtil {
         }
         return "";
     }
+
+    
+
+
+    public static String getDar(String input) {
+        try {
+            String a = getStringBetweenTwoChars(input, "[", "]");
+            return removeEverythingBefore(a,"DAR").replace("DAR","").trim();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    public static String getSar(String input) {
+        try {
+            String a = getStringBetweenTwoChars(input, "[", "]");
+            return getStringBeforeACharacter(a,"DAR").replace("SAR","").trim();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+    public static String getStringBetweenTwoChars(final String str, final String tag) {
+        try {
+            return getStringBetweenTwoChars(str, tag, tag);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+    public static String getStringBetweenTwoChars(final String input, final String startChar, final String endChar) {
+        try {
+            if (input == null || startChar == null || endChar == null) {
+                return "";
+            }
+            final int start = input.indexOf(startChar);
+            if (start != -1) {
+                final int end = input.indexOf(endChar, start + startChar.length());
+                if (end != -1) {
+                    return input.substring(start + startChar.length(), end);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+        return "";
+    }
+
+
+
+
+    public static String substringAfter(String input, String word) {
+        try {
+            return input.substring(input.indexOf(word) + word.length());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
+
+
+
+    public static String getColorSpace(String input) {
+        try {
+            String a = removeEverythingAfter(input,"kb/s");
+            a =  a.substring(0, a.lastIndexOf(','));
+            a =  a.substring(0, a.lastIndexOf(','));
+            a = substringAfter(a,",");
+            return a.trim();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
+
 
 
 
